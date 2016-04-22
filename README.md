@@ -1,8 +1,8 @@
-# Homework 2 - *Name of App*
+# Homework 2 - *Bai Tap 2*
 
-**Name of your app** Đây là trang web cho phép người dùng gửi tin nhắn. Thời gian nộp: 0h ngày 27/4.
+**Bai Tap 2** Đây là trang web cho phép người dùng gửi tin nhắn. Thời gian nộp: 0h ngày 27/4.
 
-Danh sách sinh viên: **Your Name Here**
+Danh sách sinh viên: **1312676-Đinh Minh Tú,1312554-Phạm Ngọc Thiện**
 
 URL: **Insert your Heroku URL here**
 
