@@ -30,6 +30,22 @@ router.post('/register', function(req, res, next){
 	var password2 = req.body.password2;
 
 
+	// check for image field
+	/*if(req.files.profileimage){
+		console.log('Uploading file ....');
+
+		//file info
+		var profileImageOriginalName 	= req.files.profileimage.originalname;
+		var profileImageName 			= req.files.profileimage.name;
+		var profileImageMime			= req.files.profileimage.mimetype;
+		var profileImagePath 			= req.files.profileimage.path;
+		var profileImageExt 			= req.files.profileimage.extension;
+		var profileImageSize 			= req.files.profileimage.size;
+	} else {
+		//set a default image
+		var profileImageName = 'noimage.png';
+	}*/
+
 	// form validation
 	req.checkBody('name', 'Name field is require').notEmpty();
 	req.checkBody('email', 'email field is require').notEmpty();
@@ -73,15 +89,67 @@ router.post('/register', function(req, res, next){
 				res.redirect('/');
 			}
 		});
+
+
 	}
+
 });
 
 
-router.post('/login',
-	passport.authenticate('local', {successRedirect:'/', failureRedirect:'/users/login',failureFlash: true}),
-	function(req, res) {
-		res.redirect('/');
+router.post('/login', function(req, res) {
+	var email = req.body.email;
+	var password = req.body.password;
+
+	req.checkBody('email', 'email field is require').notEmpty();
+	req.checkBody('email', 'email not valid').isEmail();
+	req.checkBody('password', 'password field is require').notEmpty();
+	var errors = req.validationErrors();
+	if(errors){
+		res.render('login', { flash: { type: 'alert-danger', messages: errors }});
+		console.log(errors);
+
+	}
+	else {
+			var userQuery = User.findOne({ email: req.body.email }).exec();
+			userQuery.addBack(function(err, user) {
+				if (!!user) {
+					console.log(user.password);
+					console.log(req.body.password);
+					req.checkBody('password', 'Passwords is incorrect').equals(user.password);
+					errors = req.validationErrors();
+					if(errors){
+						res.render('login', { flash: { type: 'alert-danger', messages: errors }});
+						console.log(errors);
+					}
+					else{
+						res.redirect('/')
+					}
+				}
+				else{
+					req.checkBody('email', 'Email or password incorrected').equals('a');
+					errors = req.validationErrors();
+					res.render('login', {flash: {type: 'alert-danger', messages: errors}});
+				}
+			});
+			/*var query = {email: email};
+			User.getUserByEmail(query,function(err,user){
+				if(err){
+					console.log(err);
+					res.render('login',{
+						errors:err
+					});
+				}
+				if (!user){
+					console.log(err);
+					res.render('login',{
+						errors:err
+					});
+				}
+				res.redirect('/')
+			});*/
+		}
 	});
+
 
 router.get('/logout', function(req, res){
 	req.logout();
