@@ -30,21 +30,6 @@ router.post('/register', function(req, res, next){
 	var password2 = req.body.password2;
 
 
-	// check for image field
-	/*if(req.files.profileimage){
-		console.log('Uploading file ....');
-
-		//file info
-		var profileImageOriginalName 	= req.files.profileimage.originalname;
-		var profileImageName 			= req.files.profileimage.name;
-		var profileImageMime			= req.files.profileimage.mimetype;
-		var profileImagePath 			= req.files.profileimage.path;
-		var profileImageExt 			= req.files.profileimage.extension;
-		var profileImageSize 			= req.files.profileimage.size;
-	} else {
-		//set a default image
-		var profileImageName = 'noimage.png';
-	}*/
 
 	// form validation
 	req.checkBody('name', 'Name field is require').notEmpty();
@@ -104,6 +89,7 @@ router.post('/login', function(req, res) {
 	req.checkBody('email', 'email not valid').isEmail();
 	req.checkBody('password', 'password field is require').notEmpty();
 	var errors = req.validationErrors();
+	
 	if(errors){
 		res.render('login', { flash: { type: 'alert-danger', messages: errors }});
 		console.log(errors);
@@ -113,8 +99,6 @@ router.post('/login', function(req, res) {
 			var userQuery = User.findOne({ email: req.body.email }).exec();
 			userQuery.addBack(function(err, user) {
 				if (!!user) {
-					console.log(user.password);
-					console.log(req.body.password);
 					req.checkBody('password', 'Passwords is incorrect').equals(user.password);
 					errors = req.validationErrors();
 					if(errors){
@@ -122,7 +106,8 @@ router.post('/login', function(req, res) {
 						console.log(errors);
 					}
 					else{
-						res.redirect('/')
+						infoUser = user;
+						res.redirect('/');
 					}
 				}
 				else{
@@ -131,32 +116,17 @@ router.post('/login', function(req, res) {
 					res.render('login', {flash: {type: 'alert-danger', messages: errors}});
 				}
 			});
-			/*var query = {email: email};
-			User.getUserByEmail(query,function(err,user){
-				if(err){
-					console.log(err);
-					res.render('login',{
-						errors:err
-					});
-				}
-				if (!user){
-					console.log(err);
-					res.render('login',{
-						errors:err
-					});
-				}
-				res.redirect('/')
-			});*/
 		}
 	});
 
 
 router.get('/logout', function(req, res){
 	req.logout();
-
-	req.flash('success_msg', 'You are logged out');
-
-	res.redirect('/users/login');
+	req.checkBody('password', 'Bạn đã đăng xuất').equals('0');
+	var errors = req.validationErrors();
+	infoUser = null;
+	req.flash('success_messages', 'You are logged out');
+	res.render('login', {flash: { type: 'alert-danger', messages: errors}});
 });
 
 module.exports = router;
