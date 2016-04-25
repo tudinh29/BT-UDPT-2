@@ -5,11 +5,15 @@ infoUser = null;
 router.get('/',ensureAuthenticated, function(req, res, next) {
   res.render('login', { title: 'Login' });
 });
+router.get('/users/index',ensureAuthenticated, function(req, res, next) {
+    res.render('index',{
+        'title': 'Messages'
+    })
+});
 function ensureAuthenticated(req,res,next){
   if (infoUser){
     return next();
   } else{
-      req.flash('error_message','not succes');
       res.redirect('/users/login');
   }
 }

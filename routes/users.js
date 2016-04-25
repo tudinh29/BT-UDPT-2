@@ -21,11 +21,7 @@ router.get('/login', function(req, res, next) {
   })
 });
 
-router.get('/index', function(req, res, next) {
-  res.render('index',{
-  	'title': 'Messages'
-  })
-});
+
 
 
 router.post('/register', function(req, res, next){
@@ -132,7 +128,6 @@ router.get('/logout', function(req, res){
 	req.checkBody('password', 'Bạn đã đăng xuất').equals('0');
 	var errors = req.validationErrors();
 	infoUser = null;
-	req.flash('success_messages', 'You are logged out');
 	res.render('login', {flash: { type: 'alert-danger', messages: errors}});
 });
 
