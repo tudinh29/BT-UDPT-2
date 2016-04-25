@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
+infoUser = null;
 /* GET home page. */
 router.get('/',ensureAuthenticated, function(req, res, next) {
   res.render('index', { title: 'Members' });
