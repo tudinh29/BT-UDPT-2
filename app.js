@@ -49,9 +49,9 @@ app.use(passport.session());
 //validator
 app.use(expressValidator({
   errorFormatter: function(param, msg, value) {
-      var namespace = param.split('.')
-      , root    = namespace.shift()
-      , formParam = root;
+    var namespace = param.split('.')
+        , root    = namespace.shift()
+        , formParam = root;
 
     while(namespace.length) {
       formParam += '[' + namespace.shift() + ']';
@@ -66,8 +66,11 @@ app.use(expressValidator({
 
 
 app.use(flash());
+var infoUser= null;
 app.use(function (req, res, next) {
   res.locals.messages = require('express-messages')(req, res);
+  res.locals.success_messages = req.flash('success_messages');
+  res.locals.error_messages = req.flash('error_messages');
   next();
 });
 
