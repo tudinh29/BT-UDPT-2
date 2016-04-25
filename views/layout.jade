@@ -17,12 +17,13 @@ html
 					a.navbar-brand(href='#') UDPT
 				#navbar.collapse.navbar-collapse
 					ul.nav.navbar-nav
-						li(class=(title == 'Members' ? 'active': ''))
-								a(href='/') Members
+						if infoUser
+							li(class=(title == 'Messages' ? 'active': ''))
+									a(href='/users/index') Messages
 					ul.nav.navbar-nav.navbar-right
 						if !infoUser
 							li
-								a(href='/users/login') Log In
+								a(href='/') Log In
 							li
 								a(href='/users/register') Register
 						if infoUser
