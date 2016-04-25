@@ -21,6 +21,13 @@ router.get('/login', function(req, res, next) {
   })
 });
 
+router.get('/index', function(req, res, next) {
+  res.render('index',{
+  	'title': 'Messages'
+  })
+});
+
+
 router.post('/register', function(req, res, next){
 	//get form values
 	console.log(req.body);
@@ -107,7 +114,7 @@ router.post('/login', function(req, res) {
 					}
 					else{
 						infoUser = user;
-						res.redirect('/');
+						res.redirect('index');
 					}
 				}
 				else{
