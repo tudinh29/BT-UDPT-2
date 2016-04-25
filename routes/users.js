@@ -20,13 +20,25 @@ router.get('/login', function(req, res, next) {
   	'title': 'Login'
   })
 });
-
+router.post('/index', function(req, res, next) {
+	var mailTu=req.body.email;
+	User.findByIdAndUpdate(
+		infoUser._id,
+		{$push: {"friendship": {email: mailTu}}},
+		{safe: true, upsert: true, new : true},
+		function(err, user) {
+			console.log(err);
+		}
+	);
+	res.render('index',{
+		'title': 'Message'
+	})
+});
 
 
 
 router.post('/register', function(req, res, next){
 	//get form values
-	console.log(req.body);
 	var name = req.body.name;
 	var email = req.body.email;
 	var password = req.body.password;
@@ -64,15 +76,15 @@ router.post('/register', function(req, res, next){
 				var newUser = new User({
 					name: name,
 					email: email,
-					password: password
+					password: password,
 				});
-
+				
 				//create user
 				User.createUser(newUser, function(err, user){
 					if(err) throw err;
-					console.log(user);
 				});
-
+				
+				
 				req.flash('success','you are now registered and may log in');
 				res.redirect('/');
 			}
@@ -109,6 +121,7 @@ router.post('/login', function(req, res) {
 						console.log(errors);
 					}
 					else{
+						console.log(infoUser);
 						infoUser = user;
 						res.redirect('index');
 					}
