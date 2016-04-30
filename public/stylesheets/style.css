@@ -17,8 +17,8 @@ textarea {
 }
 
 h1 {
-	color: #CCC49F;
-	text-align: center;
+  color: #CCC49F;
+  text-align: center;
 }
 
 .form-group > input{
@@ -27,60 +27,60 @@ h1 {
 }
 
 .form-group > label{
-	margin-left: 400px;
+  margin-left: 400px;
 }
 
 .form-control {
-	width: 30%;
+  width: 30%;
 }
 
 .form-friend{
-	margin-top: 10px;
+  margin-top: 10px;
 }
 
 
 #email{
-	width: 30%;
-	display: block;
-	height: 34px;
-    padding: 6px 12px;
-	line-height: 1.42857143;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  width: 30%;
+  display: block;
+  height: 34px;
+  padding: 6px 12px;
+  line-height: 1.42857143;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 
 .bt{
-	margin-left: 400px;
-	padding: 6px 12px;
-	font-size: 14px;
-	font-weight: normal;
-	line-height: 1.428571;
-	text-align: center;
-	border: 1px solid transparent;
-	background-color: #00FFFF;
+  margin-left: 400px;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.428571;
+  text-align: center;
+  border: 1px solid transparent;
+  background-color: #00FFFF;
 }
 
 .bt1{
-	margin-left: 5px;
-	padding: 6px 12px;
-	font-size: 14px;
-	font-weight: normal;
-	line-height: 1.428571;
-	text-align: center;
-	border: 1px solid transparent;
-	background-color: #00FFFF;
+  margin-left: 5px;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.428571;
+  text-align: center;
+  border: 1px solid transparent;
+  background-color: #00FFFF;
 }
 
 .bt2{
-	width: 5%;
-	padding: 6px 12px;
-	margin-bottom: 15px;
-	font-size: 14px;
-	font-weight: normal;
-	line-height: 1.428571;
-	text-align: center;
-	border: 1px solid transparent;
-	background-color: #00FFFF;
+  width: 5%;
+  padding: 6px 12px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.428571;
+  text-align: center;
+  border: 1px solid transparent;
+  background-color: #00FFFF;
 }
