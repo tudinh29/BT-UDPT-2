@@ -20,23 +20,72 @@ router.get('/login', function(req, res, next) {
   	'title': 'Login'
   })
 });
-router.post('/index', function(req, res, next) {
-	var mailTu=req.body.email;
-	User.findByIdAndUpdate(
-		infoUser._id,
-		{$push: {"friendship": {email: mailTu}}},
-		{safe: true, upsert: true, new : true},
-		function(err, user) {
-			console.log(err);
-		}
-	);
+router.get('/index', function(req, res, next) {
 	res.render('index',{
 		'title': 'Message'
 	})
 });
 
+router.get('/friend', function(req, res, next) {
+    res.render('friend',{
+        'title': 'Friend'
+    })
+});
 
+router.post('/friend',function(req,res,next){
 
+	var email = req.body.email;
+
+	req.checkBody('email', 'email field is require').notEmpty();
+	req.checkBody('email', 'email not valid').isEmail();
+	if (email == infoUser.email)
+	{
+		req.checkBody('email', 'Không thể kết bạn chính mình').equals('a');
+	}
+	var errors = req.validationErrors();
+	if(errors){
+		res.render('friend', { flash: { type: 'alert-danger', messages: errors }});
+	}else{
+		var userQuery = User.findOne({ email: email }).exec(); //tim email voi tham so truyen vao la email
+		userQuery.addBack(function(err, user) {
+			if(!!user) {
+				var dem = 0;
+				for (var i =0; i< infoUser.friendship.length ; i++) // truy xuat bang friend trong database
+				{
+					if (infoUser.friendship[i].email == email)
+					{
+						dem ++;
+						break;
+					}
+				}
+				if ( dem == 0)
+				{
+					//them email vao trong danh sach ban be
+					User.findByIdAndUpdate(
+					infoUser._id,
+					{$push: {"friendship": {email: email}}},
+					{safe: true, upsert: true, new : true},
+					function(err, user) {
+						infoUser = user;
+					});	
+					res.redirect('friend');	
+				} else {
+					req.checkBody('email', 'Email này đã có trong danh sách bạn bè').equals('a');
+					errors = req.validationErrors();
+					res.render('friend', { flash: { type: 'alert-danger', messages: errors }});
+				}
+						
+			}
+			else
+			{
+				req.checkBody('email', 'Email không tồn tại').equals('a');
+				errors = req.validationErrors();
+				res.render('friend', { flash: { type: 'alert-danger', messages: errors }});
+			}
+			
+		});
+	}
+});
 router.post('/register', function(req, res, next){
 	//get form values
 	var name = req.body.name;
@@ -58,10 +107,7 @@ router.post('/register', function(req, res, next){
 
 	if(errors){
 		res.render('register', { flash: { type: 'alert-danger', messages: errors }});
-		console.log(errors);
-		res.render('register',{
-			errors:errors
-		});
+
 	} else {
 		
 		var userQuery = User.findOne({ email: req.body.email }).exec();
@@ -103,11 +149,11 @@ router.post('/login', function(req, res) {
 	req.checkBody('email', 'email field is require').notEmpty();
 	req.checkBody('email', 'email not valid').isEmail();
 	req.checkBody('password', 'password field is require').notEmpty();
+
 	var errors = req.validationErrors();
 	
 	if(errors){
 		res.render('login', { flash: { type: 'alert-danger', messages: errors }});
-		console.log(errors);
 
 	}
 	else {
@@ -118,10 +164,8 @@ router.post('/login', function(req, res) {
 					errors = req.validationErrors();
 					if(errors){
 						res.render('login', { flash: { type: 'alert-danger', messages: errors }});
-						console.log(errors);
 					}
 					else{
-						console.log(infoUser);
 						infoUser = user;
 						res.redirect('index');
 					}
