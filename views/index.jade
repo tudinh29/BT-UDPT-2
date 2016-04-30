@@ -1,11 +1,6 @@
 extends layout
-
 block content
-    h1 Messages
-    input.btn.btn-default(name='button', type='button', value='Views new messages')
-    input.btn.btn-default(name='button1', type='button', value='Views sent message')
-    input.btn.btn-default(name='button2', type='button', value='Views list friend')
-    ul Danh sách bạn bè
-       each email in infoUser.friendship
-            li
-                p= email.email
+        h1 Messages
+        input.btn.btn-default(name='button', type='button', value='Views new messages' onClick="new_messages()")
+        input.btn.btn-default(name='button1', type='button', value='Views sent messages' onClick="sent_messages()")
+        input.btn.btn-default(name='button2', type='button', value='Views list friend' onClick="list_friend()")
