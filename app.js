@@ -1,57 +1,55 @@
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var exphbs = require('express-handlebars');
 var expressValidator = require('express-validator');
-var cookieParser = require('cookie-parser');
+var flash = require('connect-flash');
 var session = require('express-session');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var bodyParser = require('body-parser');
-var multer = require('multer');
-var flash = require('connect-flash');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/udpt');
 var db = mongoose.connection;
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
+// Init App
 var app = express();
 
-// view engine setup
+// View Engine
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.engine('handlebars', exphbs({defaultLayout:'layout'}));
+app.set('view engine', 'handlebars');
 
-//handle file uploads
-//app.use(multer({dest:'./uploads'}));
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+// BodyParser Middleware
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+// Set Static Folder
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Express Session
 app.use(session({
-  secret:'secret',
-  saveUninitialized: true,
-  resave: true
+    secret: 'secret',
+    saveUninitialized: true,
+    resave: true
 }));
 
-//passport
+// Passport init
 app.use(passport.initialize());
 app.use(passport.session());
 
-//validator
+// Express Validator
 app.use(expressValidator({
   errorFormatter: function(param, msg, value) {
-    var namespace = param.split('.')
-        , root    = namespace.shift()
-        , formParam = root;
+      var namespace = param.split('.')
+      , root    = namespace.shift()
+      , formParam = root;
 
     while(namespace.length) {
       formParam += '[' + namespace.shift() + ']';
@@ -64,49 +62,27 @@ app.use(expressValidator({
   }
 }));
 
-
+// Connect Flash
 app.use(flash());
-var infoUser= null;
+
+// Global Vars
+infoUser = null;
 app.use(function (req, res, next) {
-  res.locals.messages = require('express-messages')(req, res);
-  res.locals.success_messages = req.flash('success_messages');
-  res.locals.error_messages = req.flash('error_messages');
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
+  res.locals.user = req.user || null;
   next();
 });
+
+
 
 app.use('/', routes);
 app.use('/users', users);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+// Set Port
+app.set('port', (process.env.PORT || 3000));
+
+app.listen(app.get('port'), function(){
+	console.log('Server started on port '+app.get('port'));
 });
-
-// error handlers
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
-  });
-}
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
-});
-
-
-module.exports = app;
