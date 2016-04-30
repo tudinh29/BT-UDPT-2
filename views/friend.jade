@@ -1,0 +1,17 @@
+extends layout
+block content
+        h1 Friend
+        input.btn.btn-default(name='button', type='button', value='Views new messages' onClick="new_messages()")
+        input.btn.btn-default(name='button1', type='button', value='Views sent messages' onClick="sent_messages()")
+        input.btn.btn-default(name='button2', type='button', value='Views list friend' onClick="list_friend()")
+        include message
+        form(method='post',action='/users/friend')
+          .form-friend
+            label Email
+            input.form-control(name='email', type='text',placeholder='Enter email')
+            input.bt2(name='submit', type='submit', value='Add')   
+        h3 Danh sách bạn bè
+        ul
+            each email in infoUser.friendship
+               li
+                   p=email.email
