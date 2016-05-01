@@ -185,7 +185,7 @@ table {
 }
 td,
 th {
-  padding: 0;
+  padding: 4;
 }
 /*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */
 @media print {
@@ -4170,7 +4170,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   position: relative;
   min-height: 50px;
   margin-bottom: 20px;
-  border: 1px solid transparent;
+  border: 6px solid transparent;
 }
 @media (min-width: 768px) {
   .navbar {
