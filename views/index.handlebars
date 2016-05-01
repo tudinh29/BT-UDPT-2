@@ -2,3 +2,18 @@
 <input type="button"  name="button"  value='Views new messages  ' onClick="new_messages()" >
 <input type="button" name="button"  value='Views sent messages' onClick="sent_messages()" >
 <input type="button"  name="button"  value='Views list friend' onClick="list_friend()" >
+
+<h3> Danh sách tin nhắn</h3>
+    <table>
+        
+        {{#each user.friendship}}
+        <tr>
+            <td>
+                <div class= list_tn>{{this.email}}
+                <a href = "/users/logout">(Xem tin nhắn)</a>
+                </div>
+            </td>
+        </tr>
+        {{/each}}
+        
+    </table>
