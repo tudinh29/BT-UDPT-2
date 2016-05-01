@@ -1,4 +1,4 @@
-<h2 class="page-header">Messages</h2>
+<h2 class="page-header">Friend</h2>
 <input type="button"  name="button"  value='Views new messages  ' onClick="new_messages()" >
 <input type="button" name="button"  value='Views sent messages' onClick="sent_messages()" >
 <input type="button"  name="button"  value='Views list friend' onClick="list_friend()" >
@@ -15,11 +15,15 @@
         <input class="bt2" name='submit' type='submit', value='Add' >
     </div>
     <h3> Danh sách bạn bè </h3>
-    <ul>
+    <table>
+        
         {{#each user.friendship}}
-            <li>
+        <tr>
+            <td>
                 {{this.email}}
-            </li>
+            </td>
+        </tr>
         {{/each}}
-    </ul>
+        
+    </table>
 
