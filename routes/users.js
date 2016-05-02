@@ -32,6 +32,76 @@ router.get('/friend', function(req, res, next) {
 		'title': 'Friend'
 	})
 });
+router.post('/new_messages',function(req,res,next){
+	var email = req.body.email;
+	var textmess = req.body.textmess;
+	req.checkBody('email', 'Yêu cầu nhập email').notEmpty();
+	req.checkBody('email', 'Email không tồn tại').isEmail();
+	req.checkBody('textmess', 'Yêu cầu nhập nội dung').notEmpty();
+	var datenow = new Date();
+	var errors = req.validationErrors();
+	if(errors){
+		res.render('new_messages', { errors:errors});
+	}else{
+		if (email == req.user.email)
+		{
+			req.checkBody('email', 'Không thể gửi tin nhắn tới chính mình').equals('a');
+			errors = req.validationErrors();
+			res.render('friend', { errors:errors});
+		}
+		else {
+			var userQuery = User.findOne({email: email}).exec(); //tim email voi tham so truyen vao la email
+			userQuery.addBack(function (err, user) {
+				if (!!user) {
+					var dem = 0;
+					for (var i = 0; i < req.user.friendship.length; i++) // truy xuat bang friend trong database
+					{
+						if (req.user.friendship[i].email == email) {
+							dem++;
+							break;
+						}
+					}
+					if ( dem != 0) {
+						//Lưu tin nhắn gữi vào dbs
+						User.findByIdAndUpdate(
+							req.user._id,
+							{$push: {"message_send": {user_send: email, message:  textmess, datesend: datenow}}},
+							{safe: true, upsert: true, new: true},
+							function (err, user) {
+								if (err) throw err;
+							});
+						User.findByIdAndUpdate(
+							user._id,
+							{
+								$push: {
+									"message_rec": {
+										user_send: req.user.email,
+										message: textmess, datesent: datenow
+									}
+								}
+							},
+							{safe: true, upsert: true, new: true},
+							function (err, user) {
+								if (err) throw err;
+							});
+						res.redirect('new_messages');
+					}
+					else{
+						req.checkBody('email', 'Email này không có trong danh sách bạn bè').equals('a');
+						errors = req.validationErrors();
+						res.render('new_messages', {errors: errors});
+					}
+				}
+				else {
+					req.checkBody('email', 'Email không tồn tại').equals('a');
+					errors = req.validationErrors();
+					res.render('new_messages', {errors: errors});
+				}
+
+			});
+		}
+	}
+});
 
 router.post('/friend',function(req,res,next){
 
@@ -69,7 +139,7 @@ router.post('/friend',function(req,res,next){
 							{$push: {"friendship": {email: email}}},
 							{safe: true, upsert: true, new: true},
 							function (err, user) {
-								req.user = user;
+								if(err) throw err;
 							});
 						res.redirect('friend');
 					} else {
