@@ -1,5 +1,5 @@
 <h2 class="page-header">New Messages</h2>
-<input type="button"  name="button"  value='Views new messages  ' onClick="new_messages()" >
+<input type="button"  name="button"  value='Send new messages  ' onClick="new_messages()" >
 <input type="button" name="button"  value='Views sent messages' onClick="sent_messages()" >
 <input type="button"  name="button"  value='Views list friend' onClick="list_friend()" >
 {{#if errors}}
@@ -7,13 +7,17 @@
         <div class="alert alert-danger">{{msg}}</div>
     {{/each}}
 {{/if}}
-<form method="post" action="/users/friend">
+<form method="post" action="/users/new_messages">
 
     <div class="form-friend">
-        <label>Email người nhận</label>
-        <input type="email" class="form-control" placeholder="Enter email" name="email">
+        <h5>Email người nhận</h5>
+        <select name="email">
+            {{#each user.friendship}}
+                <option value="{{this.email}}" > {{this.email}}
+            {{/each}}
+            </select>
         <h5>Nội dung tin nhắn </h5>
         <textarea name = "textmess" id = "textmess" rows='6', cols='50' placeholder = "Nhập nội dung..."></textarea>
     </div>
     <input class="bt2" name='submit' type='submit', value='Sent' >
-
+</form>

@@ -1,17 +1,31 @@
 <h2 class="page-header">Messages</h2>
-<input type="button"  name="button"  value='Views new messages  ' onClick="new_messages()" >
+<input type="button"  name="button"  value='Send new messages  ' onClick="new_messages()" >
 <input type="button" name="button"  value='Views sent messages' onClick="sent_messages()" >
 <input type="button"  name="button"  value='Views list friend' onClick="list_friend()" >
 
 <h3> Danh sách tin nhắn</h3>
     <table>
-        
-        {{#each user.friendship}}
         <tr>
             <td>
-                <div class= list_tn>{{this.email}}
-                <a href = "/users/logout">(Xem tin nhắn)</a>
-                </div>
+                Email gửi
+            </td>
+            <td>
+                Ngày gửi
+            </td>
+            <td>
+                Nội dung
+            </td>
+        </tr>
+        {{#each user.message_rec}}
+        <tr>
+            <td>
+                {{this.user_send}}
+            </td>
+            <td>
+                {{this.datesent}}
+            </td>
+            <td>
+                {{this.message}}
             </td>
         </tr>
         {{/each}}

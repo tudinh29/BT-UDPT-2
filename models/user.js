@@ -35,13 +35,19 @@ var UserSchema = new Schema({
 	//save messages from order user
 	message_rec      : [{
 		user_send    : String,
-		message      : [{text:String, read:{type:Boolean, default: false}, date:{type: Date, default: Date.now }}]
+		message      : String,
+		read:{type:Boolean, default: false},
+        datesent:Date ,
+		dateread:Date
 	}],
 
 	//save messages sended to order user
 	message_send     : [{
 		user_send    : String,
-		message        : [{text:String, date:{type: Date, default: Date.now }}]
+		message        : String,
+		read:{type:Boolean, default: false},
+		datesend: Date , 
+		dateread:Date
 	}],
 	// save list friend
 	friendship       : [{
