@@ -31,10 +31,43 @@ router.get('/friend', function(req, res, next) {
 	res.render('friend',{
 		'title': 'Friend'
 	})
+})
+
+router.post('/index',function(req,res,next) {
+	var mess_id = req.body.id;
+	var datenow = new Date();
+	var user_send = req.body.user_send;
+	var read = req.body.read;
+	var mess_id_send = req.body.mess_id_send;
+	
+		User.update(
+			{_id : req.user._id , "message_rec._id" : mess_id},
+			{$set: { "message_rec.$.read" : true ,"message_rec.$.dateread":datenow}},
+			{safe: true, upsert: true, new: true},
+			function (err, user) {
+				if (err) throw err;
+
+			});
+	var userQuery = User.findOne({email: user_send}).exec(); //tim email voi tham so truyen vao la email
+	userQuery.addBack(function (err, user) {
+	console.log(user_send);
+		console.log(mess_id_send);
+			User.update(
+				{_id: user._id, "message_send._id": mess_id_send},
+				{$set: {"message_send.$.read": true, "message_send.$.dateread": datenow}},
+				{safe: true, upsert: true, new: true},
+				function (err, user) {
+					if (err) throw err;
+				})
+		});
+
+	res.redirect('index' );
 });
 router.post('/new_messages',function(req,res,next){
 	var email = req.body.email;
 	var textmess = req.body.textmess;
+	var idnhan = "123";
+	var idgui = "123";
 	req.checkBody('email', 'Yêu cầu nhập email').notEmpty();
 	req.checkBody('email', 'Email không tồn tại').isEmail();
 	req.checkBody('textmess', 'Yêu cầu nhập nội dung').notEmpty();
@@ -62,16 +95,10 @@ router.post('/new_messages',function(req,res,next){
 						}
 					}
 					if ( dem != 0) {
+						var user_nhan = user;
 						//Lưu tin nhắn gữi vào dbs
 						User.findByIdAndUpdate(
-							req.user._id,
-							{$push: {"message_send": {user_send: email, message:  textmess, datesend: datenow}}},
-							{safe: true, upsert: true, new: true},
-							function (err, user) {
-								if (err) throw err;
-							});
-						User.findByIdAndUpdate(
-							user._id,
+							user_nhan._id,
 							{
 								$push: {
 									"message_rec": {
@@ -83,8 +110,27 @@ router.post('/new_messages',function(req,res,next){
 							{safe: true, upsert: true, new: true},
 							function (err, user) {
 								if (err) throw err;
+								idnhan =  user.message_rec[user.message_rec.length-1]._id;
+								User.findByIdAndUpdate(
+									req.user._id,
+									{$push: {"message_send": {user_send: email, message:  textmess, datesend: datenow , mess_id_nhan: idnhan}}},
+									{safe: true, upsert: true, new: true},
+									function (err, user) {
+										if (err) throw err;
+										idgui =  user.message_send[user.message_send.length-1]._id;
+										console.log(idgui);
+										console.log(idnhan);
+										User.update(
+											{_id : user_nhan._id , "message_rec._id" : idnhan},
+											{$set: { "message_rec.$.mess_id_send" : idgui }},
+											{safe: true, upsert: true, new: true},
+											function (err, user) {
+												if (err) throw err;
+											});
+										res.redirect('new_messages');
+									});
+
 							});
-						res.redirect('new_messages');
 					}
 					else{
 						req.checkBody('email', 'Email này không có trong danh sách bạn bè').equals('a');
@@ -106,10 +152,10 @@ router.post('/new_messages',function(req,res,next){
 router.post('/friend',function(req,res,next){
 
 	var email = req.body.email;
-	console.log(req.user);
+
 	req.checkBody('email', 'email field is require').notEmpty();
 	req.checkBody('email', 'email not valid').isEmail();
-	
+
 	var errors = req.validationErrors();
 	if(errors){
 		res.render('friend', { errors:errors});
@@ -204,31 +250,31 @@ router.post('/register', function(req, res){
 				res.redirect('/users/login');
 			}
 		});
-		
+
 	}
 });
 
 passport.use(new LocalStrategy(
 	function(email, password, done) {
-		
-			var userQuery = User.findOne({ email: email }).exec();
-			userQuery.addBack(function(err, user) {
-				if (!!user) {
-					User.comparePassword(password, user.password, function(err, isMatch){
-						if(err) throw err;
-						if(isMatch){
-							return done(null, user);
-						} else {
-							return done(null, false, {message: 'Password sai !!'});
-						}
-						res.redirect('index');
-					});
-				}
-				else{
-					return done(null, false, {message: 'Email không tồn tại'});
-				}
-			});
-		
+
+		var userQuery = User.findOne({ email: email }).exec();
+		userQuery.addBack(function(err, user) {
+			if (!!user) {
+				User.comparePassword(password, user.password, function(err, isMatch){
+					if(err) throw err;
+					if(isMatch){
+						return done(null, user);
+					} else {
+						return done(null, false, {message: 'Password sai !!'});
+					}
+					res.redirect('index');
+				});
+			}
+			else{
+				return done(null, false, {message: 'Email không tồn tại'});
+			}
+		});
+
 	}));
 
 passport.serializeUser(function(user, done) {

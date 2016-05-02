@@ -37,6 +37,7 @@ var UserSchema = new Schema({
 		user_send    : String,
 		message      : String,
 		read:{type:Boolean, default: false},
+		mess_id_send : String,
         datesent:Date ,
 		dateread:Date
 	}],
@@ -46,6 +47,7 @@ var UserSchema = new Schema({
 		user_send    : String,
 		message        : String,
 		read:{type:Boolean, default: false},
+		mess_id_nhan : String,
 		datesend: Date , 
 		dateread:Date
 	}],
@@ -83,6 +85,6 @@ module.exports.comparePassword = function(candidatePassword, hash, callback){
 module.exports.getUserByEmail = function(email, callback){
 	User.findOne(email, callback);
 }
-module.exports.updateFriendShip = function(email, callback){
+module.exports.updateStatus = function(email, callback){
 	User.update(email, callback);
 }
