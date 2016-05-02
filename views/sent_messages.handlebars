@@ -19,6 +19,9 @@
         <td>
             Tính trạng
         </td>
+        <td>
+            Thời gian đã đọc
+        </td>
     </tr>
     {{#each user.message_send}}
         <tr>
@@ -37,6 +40,9 @@
                 {{else}}
                     Chưa đọc
                 {{/if}}
+            </td>
+            <td>
+                {{this.dateread}}
             </td>
         </tr>
     {{/each}}
