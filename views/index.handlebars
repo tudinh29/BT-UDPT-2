@@ -24,6 +24,7 @@
             </td>
         </tr>
         {{#each user.message_rec}}
+        {{#if this.read}}
         <tr>
             <td>
                 {{this.user_send}}
@@ -32,9 +33,18 @@
                 {{this.datesent}}
             </td>
             <td>
-                {{#if this.read}}
-                    {{message}}
-                {{else}}
+                {{message}}
+            </td>
+        </tr>
+        {{else}}
+            <tr bgcolor= #00FFFF>
+                <td>
+                    {{this.user_send}}
+                </td>
+                <td>
+                    {{this.datesent}}
+                </td>
+                <td>
                     <form  action="/users/index" method="POST">
                         <input type="hidden" name="read" value="{{this.read}}">
                         <input type="hidden" name="id" value="{{this._id}}">
@@ -43,9 +53,9 @@
                         <button type="submit" >Xem</button>
                     </form>
 
-                {{/if}}
-            </td>
-        </tr>
+                </td>
+            </tr>
+        {{/if}}
         {{/each}}
 
     </table>
