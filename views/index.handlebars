@@ -2,13 +2,7 @@
 <input type="button"  name="button"  value='Send new messages  ' onClick="new_messages()" >
 <input type="button" name="button"  value='Views sent messages' onClick="sent_messages()" >
 <input type="button"  name="button"  value='Views list friend' onClick="list_friend()" >
-<script language="javascript">
-    $(document).ready(function() {
-        $('#Link').click(function() {
-            $.post("example.php", { n: "203000"} );
-        });
-    });
-</script>
+
 
 <h3> Danh sách tin nhắn</h3>
     <table>
@@ -33,7 +27,7 @@
                 {{this.datesent}}
             </td>
             <td>
-                {{message}}
+                Đã đọc rồi
             </td>
         </tr>
         {{else}}
@@ -45,8 +39,10 @@
                     {{this.datesent}}
                 </td>
                 <td>
+                    {{this.message}}
                     <form  action="/users/index" method="POST">
                         <input type="hidden" name="read" value="{{this.read}}">
+                        <input type="hidden" name="message" value="{{this.message}}">
                         <input type="hidden" name="id" value="{{this._id}}">
                         <input type="hidden" name="user_send" value="{{this.user_send}}">
                         <input type="hidden" name="mess_id_send" value="{{this.mess_id_send}}">
