@@ -192,6 +192,12 @@ router.post('/friend',function(req,res,next){
 								function (err, user) {
 									if (err) throw err;
 								});
+							User.update({_id:req.user._id},
+								{$pull:{blocklist : {email: email}}},function (err, user) {
+									if (err) throw err;
+
+								});
+							req.flash('success_msg', 'Thêm thành công : '+ email);
 							res.redirect('friend');
 						} else {
 							req.checkBody('email', 'Email này đã có trong danh sách bạn bè').equals('a');
@@ -199,6 +205,31 @@ router.post('/friend',function(req,res,next){
 							res.render('friend', {errors: errors});
 						}
 					}
+					else if ( inputValue == 'Delete') {
+						var dem = 0;
+						for (var i = 0; i < req.user.friendship.length; i++) // truy xuat bang friend trong database
+						{
+							if (req.user.friendship[i].email == email) {
+								dem++;
+								break;
+							}
+						}
+						if (dem == 0) {
+							req.checkBody('email', 'Email này không có trong danh sách bạn bè').equals('a');
+							errors = req.validationErrors();
+							res.render('friend', {errors: errors})
+						}
+						else {
+							User.update({_id:req.user._id},
+								{$pull:{friendship : {email: email}}},function (err, user) {
+									if (err) throw err;
+	
+								});
+							req.flash('success_msg', 'Đã xóa thành công : '+ email);
+							res.redirect('friend');
+						}
+					}
+					
 					else if ( inputValue == 'Block') {
 						var dem = 0;
 						for (var i = 0; i < req.user.blocklist.length; i++) // truy xuat bang friend trong database
