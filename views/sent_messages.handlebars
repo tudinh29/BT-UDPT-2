@@ -1,0 +1,50 @@
+<h2 class="page-header">Sent Messages</h2>
+<input type="button"  name="button"  value='Send new messages  ' onClick="new_messages()" >
+<input type="button" name="button"  value='Views sent messages' onClick="sent_messages()" >
+<input type="button"  name="button"  value='Views list friend' onClick="list_friend()" >
+
+
+<h3> Danh sách tin nhắn đã gửi</h3>
+<table>
+    <tr>
+        <td>
+            Email người nhận
+        </td>
+        <td>
+            Ngày gửi
+        </td>
+        <td>
+            Nội dung
+        </td>
+        <td>
+            Tính trạng
+        </td>
+        <td>
+            Thời gian đã đọc
+        </td>
+    </tr>
+    {{#each user.message_send}}
+        <tr>
+            <td>
+                {{this.user_send}}
+            </td>
+            <td>
+                {{this.datesend}}
+            </td>
+            <td>
+                {{this.message}}
+            </td>
+            <td>
+                {{#if this.read}}
+                    Đã đọc
+                {{else}}
+                    Chưa đọc
+                {{/if}}
+            </td>
+            <td>
+                {{this.dateread}}
+            </td>
+        </tr>
+    {{/each}}
+
+</table>
