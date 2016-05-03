@@ -97,40 +97,63 @@ router.post('/new_messages',function(req,res,next){
 					if ( dem != 0) {
 						var user_nhan = user;
 						//Lưu tin nhắn gữi vào dbs
-						User.findByIdAndUpdate(
-							user_nhan._id,
-							{
-								$push: {
-									"message_rec": {
-										user_send: req.user.email,
-										message: textmess, datesent: datenow
+						var dem2 = 0;
+						for (var i = 0; i < user_nhan.blocklist.length; i++) // truy xuat bang friend trong database
+						{
+							if (user_nhan.blocklist[i].email == req.user.email) {
+								dem2++;
+								break;
+							}
+						}
+						if ( dem2 != 0)
+						{
+							req.checkBody('email', 'Bạn đã bị block bởi '+ email+',không thể gửi tin nhắn').equals('a');
+							errors = req.validationErrors();
+							res.render('new_messages', { errors:errors});
+						}
+						else {
+							User.findByIdAndUpdate(
+								user_nhan._id,
+								{
+									$push: {
+										"message_rec": {
+											user_send: req.user.email,
+											message: textmess, datesent: datenow
+										}
 									}
-								}
-							},
-							{safe: true, upsert: true, new: true},
-							function (err, user) {
-								if (err) throw err;
-								idnhan =  user.message_rec[user.message_rec.length-1]._id;
-								User.findByIdAndUpdate(
-									req.user._id,
-									{$push: {"message_send": {user_send: email, message:  textmess, datesend: datenow , mess_id_nhan: idnhan}}},
-									{safe: true, upsert: true, new: true},
-									function (err, user) {
-										if (err) throw err;
-										idgui =  user.message_send[user.message_send.length-1]._id;
-										console.log(idgui);
-										console.log(idnhan);
-										User.update(
-											{_id : user_nhan._id , "message_rec._id" : idnhan},
-											{$set: { "message_rec.$.mess_id_send" : idgui }},
-											{safe: true, upsert: true, new: true},
-											function (err, user) {
-												if (err) throw err;
-											});
-										res.redirect('new_messages');
-									});
+								},
+								{safe: true, upsert: true, new: true},
+								function (err, user) {
+									if (err) throw err;
+									idnhan = user.message_rec[user.message_rec.length - 1]._id;
+									User.findByIdAndUpdate(
+										req.user._id,
+										{
+											$push: {
+												"message_send": {
+													user_send: email,
+													message: textmess,
+													datesend: datenow,
+													mess_id_nhan: idnhan
+												}
+											}
+										},
+										{safe: true, upsert: true, new: true},
+										function (err, user) {
+											if (err) throw err;
+											idgui = user.message_send[user.message_send.length - 1]._id;
+											User.update(
+												{_id: user_nhan._id, "message_rec._id": idnhan},
+												{$set: {"message_rec.$.mess_id_send": idgui}},
+												{safe: true, upsert: true, new: true},
+												function (err, user) {
+													if (err) throw err;
+												});
+											res.redirect('new_messages');
+										});
 
-							});
+								});
+						}
 					}
 					else{
 						req.checkBody('email', 'Email này không có trong danh sách bạn bè').equals('a');

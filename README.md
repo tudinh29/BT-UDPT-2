@@ -25,9 +25,9 @@ Danh sách chức năng **phụ**:
 * [ ] Người dùng có thể gửi hình ảnh đính kèm theo thông điệp.
 * [ ] Người dùng có thể gửi tin nhắn đến nhiều người dùng cùng lúc.
 * [ ] Người dùng có thể đăng nhập với Facebook.
-* [ ] Người dùng có thể block người khác. Sau khi block, người dùng sẽ không nhận được tin nhắn từ người bị block gửi nữa.
-* [ ] Người dùng có thể xóa người dùng khác ra khỏi danh sách bạn.
-* [ ] Người dùng có thể unblock người dùng khác.
+* [x] Người dùng có thể block người khác. Sau khi block, người dùng sẽ không nhận được tin nhắn từ người bị block gửi nữa.
+* [x] Người dùng có thể xóa người dùng khác ra khỏi danh sách bạn.
+* [x] Người dùng có thể unblock người dùng khác.
 * [ ] Khi người dùng kéo xuống cuối trang, các tin nhắn tiếp theo sẽ tự động hiển thị hoặc có nút nhấn "Xem thêm tin nhắn" để nạp thêm danh sách tin nhắn.
 * [ ] Người dùng sẽ nhận được email thông báo khi họ nhận được tin nhắn cùng với link để xem tin nhắn.
 * [ ] Người dùng sẽ nhận được email khi người nhận đã đọc tin nhắn.
