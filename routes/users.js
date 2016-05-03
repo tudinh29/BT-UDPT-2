@@ -152,17 +152,21 @@ router.post('/new_messages',function(req,res,next){
 router.post('/friend',function(req,res,next){
 
 	var email = req.body.email;
-
+	var inputValue = req.body.submit;
 	req.checkBody('email', 'email field is require').notEmpty();
-	req.checkBody('email', 'email not valid').isEmail();
-
+	req.checkBody('email', 'email not valid').isEmail();;
 	var errors = req.validationErrors();
 	if(errors){
 		res.render('friend', { errors:errors});
 	}else{
 		if (email == req.user.email)
 		{
-			req.checkBody('email', 'Không thể kết bạn chính mình').equals('a');
+			if ( inputValue == 'Add')
+				req.checkBody('email', 'Không thể kết bạn chính mình').equals('a');
+			if ( inputValue == 'Block')
+				req.checkBody('email', 'Không thể block chính mình').equals('a');
+			if ( inputValue == 'Unblock')
+				req.checkBody('email', 'Không thể unblock chính mình').equals('a');
 			errors = req.validationErrors();
 			res.render('friend', { errors:errors});
 		}
@@ -170,30 +174,91 @@ router.post('/friend',function(req,res,next){
 			var userQuery = User.findOne({email: email}).exec(); //tim email voi tham so truyen vao la email
 			userQuery.addBack(function (err, user) {
 				if (!!user) {
-					var dem = 0;
-					for (var i = 0; i < req.user.friendship.length; i++) // truy xuat bang friend trong database
-					{
-						if (req.user.friendship[i].email == email) {
-							dem++;
-							break;
+					if ( inputValue == 'Add') {
+						var dem = 0;
+						for (var i = 0; i < req.user.friendship.length; i++) // truy xuat bang friend trong database
+						{
+							if (req.user.friendship[i].email == email) {
+								dem++;
+								break;
+							}
+						}
+						if (dem == 0) {
+							//them email vao trong danh sach ban be
+							User.findByIdAndUpdate(
+								req.user._id,
+								{$push: {"friendship": {email: email}}},
+								{safe: true, upsert: true, new: true},
+								function (err, user) {
+									if (err) throw err;
+								});
+							res.redirect('friend');
+						} else {
+							req.checkBody('email', 'Email này đã có trong danh sách bạn bè').equals('a');
+							errors = req.validationErrors();
+							res.render('friend', {errors: errors});
 						}
 					}
-					if (dem == 0) {
-						//them email vao trong danh sach ban be
-						User.findByIdAndUpdate(
-							req.user._id,
-							{$push: {"friendship": {email: email}}},
-							{safe: true, upsert: true, new: true},
-							function (err, user) {
-								if(err) throw err;
-							});
-						res.redirect('friend');
-					} else {
-						req.checkBody('email', 'Email này đã có trong danh sách bạn bè').equals('a');
-						errors = req.validationErrors();
-						res.render('friend', {errors: errors});
+					else if ( inputValue == 'Block') {
+						var dem = 0;
+						for (var i = 0; i < req.user.blocklist.length; i++) // truy xuat bang friend trong database
+						{
+							if (req.user.blocklist[i].email == email) {
+								dem++;
+								break;
+							}
+						}
+						if (dem == 0) {
+							//them email vao trong danh sach ban be
+							User.findByIdAndUpdate(
+								req.user._id,
+								{$push: {"blocklist": {email: email}}},
+								{safe: true, upsert: true, new: true},
+								function (err, user) {
+									if (err) throw err;
+								});
+							User.update({_id:req.user._id},
+								{$pull:{friendship : {email: email}}},function (err, user) {
+									if (err) throw err;
+							
+								});
+							
+							req.flash('success_msg', 'Đã block thành công : '+ email);
+							res.redirect('friend');
+						} else {
+							req.checkBody('email', 'Email này đã có trong Blocklist').equals('a');
+							errors = req.validationErrors();
+							res.render('friend', {errors: errors});
+						}
 					}
+					else if ( inputValue == 'Unblock')
+					{
+						var dem = 0;
+						for (var i = 0; i < req.user.blocklist.length; i++) // truy xuat bang friend trong database
+						{
+							if (req.user.blocklist[i].email == email) {
+								dem++;
+								break;
+							}
+						}
+						if (dem == 0) {
+							//them email vao trong danh sach ban be
+							req.checkBody('email', 'Email này không có trong Blocklist').equals('a');
+							errors = req.validationErrors();
+							res.render('friend', {errors: errors});
+						} else {
+							
+							User.update({_id:req.user._id},
+								{$pull:{blocklist : {email: email}}},
+								function (err, user) {
+									if (err) throw err;
 
+								});
+							req.flash('success_msg', 'Unblock thành công : '+ email);
+							res.redirect('friend');
+						}
+						
+					}
 				}
 				else {
 					req.checkBody('email', 'Email không tồn tại').equals('a');
