@@ -35,7 +35,7 @@ table, th, td {
 td{
 	padding: 5px;
 }
-tr:nth-child(even) {background-color: #00FFFF}
+/*tr:nth-child(even) {background-color: #00FFFF}*/
 /*tr:hover {background-color:#00FFFF}*/
 
 
