@@ -4,8 +4,8 @@
   "description": "Simple authentication system",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
-  },
+  "start": "node app.js"
+	},
   "author": "Brad Traversy",
   "license": "ISC",
   "dependencies": {
@@ -23,5 +23,14 @@
     "passport": "*",
     "passport-http": "*",
     "passport-local": "*"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://tudinh29@github.com/tudinh29/BT-UDPT-2.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tudinh29/BT-UDPT-2/issues"
+  },
+  "homepage": "https://github.com/tudinh29/BT-UDPT-2#readme"
 }
