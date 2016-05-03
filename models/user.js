@@ -53,10 +53,11 @@ var UserSchema = new Schema({
 	}],
 	// save list friend
 	friendship       : [{
-		email        : String,
+		email        : String
+	}],
+	blocklist : [{
+		email : String
 	}]
-
-
 });
 
 var User = module.exports = mongoose.model('User', UserSchema);
@@ -88,3 +89,12 @@ module.exports.getUserByEmail = function(email, callback){
 module.exports.updateStatus = function(email, callback){
 	User.update(email, callback);
 }
+module.exports.removeFriend = function(db, callback) {
+	db.collection('users').deleteMany(
+		{ "borough": "Manhattan" },
+		function(err, results) {
+			console.log(results);
+			callback();
+		}
+	);
+};
