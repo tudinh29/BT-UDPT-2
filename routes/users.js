@@ -38,9 +38,9 @@ router.post('/index',function(req,res,next) {
 	var datenow = new Date();
 	var user_send = req.body.user_send;
 	var read = req.body.read;
+	var mess = req.body.message;
 	var mess_id_send = req.body.mess_id_send;
-	
-		User.update(
+	User.update(
 			{_id : req.user._id , "message_rec._id" : mess_id},
 			{$set: { "message_rec.$.read" : true ,"message_rec.$.dateread":datenow}},
 			{safe: true, upsert: true, new: true},
@@ -50,18 +50,21 @@ router.post('/index',function(req,res,next) {
 			});
 	var userQuery = User.findOne({email: user_send}).exec(); //tim email voi tham so truyen vao la email
 	userQuery.addBack(function (err, user) {
-	console.log(user_send);
-		console.log(mess_id_send);
 			User.update(
 				{_id: user._id, "message_send._id": mess_id_send},
 				{$set: {"message_send.$.read": true, "message_send.$.dateread": datenow}},
 				{safe: true, upsert: true, new: true},
 				function (err, user) {
 					if (err) throw err;
+					res.render('index',{user: req.user});
 				})
+<<<<<<< HEAD
+		})
+=======
 		});
 
 	
+>>>>>>> c2f9db3037ee60178ce0d4c933b18a7a0a646f2c
 });
 router.post('/new_messages',function(req,res,next){
 	var email = req.body.email;
