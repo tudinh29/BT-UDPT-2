@@ -2,50 +2,43 @@
 <input type="button"  name="button"  value='Send new messages  ' onClick="new_messages()" >
 <input type="button" name="button"  value='Views sent messages' onClick="sent_messages()" >
 <input type="button"  name="button"  value='Views list friend' onClick="list_friend()" >
-<<<<<<< HEAD
 
-=======
 <script language="javascript">
     $(document).ready(function() {
         $("#show").click(function(){
             $(this).children("p").show();
             $(this).children("button").hide();
         });
-
     });
 </script>
->>>>>>> c2f9db3037ee60178ce0d4c933b18a7a0a646f2c
+
 
 <h3> Danh sách tin nhắn</h3>
-    <table>
-        <tr>
-            <td>
-                Email gửi
-            </td>
-            <td>
-                Ngày gửi
-            </td>
-            <td>
-                Nội dung
-            </td>
-        </tr>
-        {{#each user.message_rec}}
+<table>
+    <tr>
+        <td>
+            Email gửi
+        </td>
+        <td>
+            Ngày gửi
+        </td>
+        <td>
+            Nội dung
+        </td>
+    </tr>
+    {{#each user.message_rec}}
         {{#if this.read}}
-        <tr>
-            <td>
-                {{this.user_send}}
-            </td>
-            <td>
-                {{this.datesent}}
-            </td>
-            <td>
-<<<<<<< HEAD
-                Đã đọc rồi
-=======
-                Đã đọc
->>>>>>> c2f9db3037ee60178ce0d4c933b18a7a0a646f2c
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    {{this.user_send}}
+                </td>
+                <td>
+                    {{this.datesent}}
+                </td>
+                <td>
+                    Đã đọc
+                </td>
+            </tr>
         {{else}}
             <tr bgcolor= #00FFFF>
                 <td>
@@ -55,13 +48,7 @@
                     {{this.datesent}}
                 </td>
                 <td>
-<<<<<<< HEAD
-                    {{this.message}}
-                    <form  action="/users/index" method="POST">
-=======
-
                     <form id="show" action="/users/index" method="POST">
->>>>>>> c2f9db3037ee60178ce0d4c933b18a7a0a646f2c
                         <input type="hidden" name="read" value="{{this.read}}">
                         <input type="hidden" name="message" value="{{this.message}}">
                         <input type="hidden" name="id" value="{{this._id}}">
@@ -74,6 +61,6 @@
                 </td>
             </tr>
         {{/if}}
-        {{/each}}
+    {{/each}}
 
-    </table>
+</table>

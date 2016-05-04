@@ -6,9 +6,3 @@ function sent_messages(){
 
 function list_friend(){
     setTimeout(function(){window.location.href = '/users/friend';}, 300)}
-function subDisplay(message) {
-    $("#show").each(function() {
-        $(this).hide();
-    });
-    $(message).show();
-}
