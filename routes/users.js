@@ -56,15 +56,8 @@ router.post('/index',function(req,res,next) {
 				{safe: true, upsert: true, new: true},
 				function (err, user) {
 					if (err) throw err;
-					res.render('index',{user: req.user});
 				})
-<<<<<<< HEAD
-		})
-=======
 		});
-
-	
->>>>>>> c2f9db3037ee60178ce0d4c933b18a7a0a646f2c
 });
 router.post('/new_messages',function(req,res,next){
 	var email = req.body.email;
