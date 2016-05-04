@@ -4,9 +4,11 @@
 <input type="button"  name="button"  value='Views list friend' onClick="list_friend()" >
 <script language="javascript">
     $(document).ready(function() {
-        $('#Link').click(function() {
-            $.post("example.php", { n: "203000"} );
+        $("#show").click(function(){
+            $(this).children("p").show();
+            $(this).children("button").hide();
         });
+
     });
 </script>
 
@@ -33,7 +35,7 @@
                 {{this.datesent}}
             </td>
             <td>
-                {{message}}
+                Đã đọc
             </td>
         </tr>
         {{else}}
@@ -45,12 +47,14 @@
                     {{this.datesent}}
                 </td>
                 <td>
-                    <form  action="/users/index" method="POST">
+
+                    <form id="show" action="/users/index" method="POST">
                         <input type="hidden" name="read" value="{{this.read}}">
                         <input type="hidden" name="id" value="{{this._id}}">
                         <input type="hidden" name="user_send" value="{{this.user_send}}">
                         <input type="hidden" name="mess_id_send" value="{{this.mess_id_send}}">
-                        <button type="submit" >Xem</button>
+                        <p style="display: none" >{{this.message}}</p>
+                        <button  type="submit" >Xem</button>
                     </form>
 
                 </td>
