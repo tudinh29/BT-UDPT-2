@@ -61,7 +61,7 @@ router.post('/index',function(req,res,next) {
 				})
 		});
 
-	res.redirect('index' );
+	
 });
 router.post('/new_messages',function(req,res,next){
 	var email = req.body.email;
