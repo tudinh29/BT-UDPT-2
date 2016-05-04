@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>UDPT</title>
+    <title>{{title}}</title>
     <link rel="stylesheet" href="/stylesheets/bootstrap.css" />
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
@@ -32,6 +32,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {{#if user}}
+                    <li><a href="/users/index">Hello {{user.email}}</a></li>
                     <li><a href="/users/logout">Logout</a></li>
                 {{else}}
                     <li><a href="/">Log In</a></li>

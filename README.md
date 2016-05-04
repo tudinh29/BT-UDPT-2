@@ -4,7 +4,7 @@
 
 Danh sách sinh viên: **1312676-Đinh Minh Tú,1312554-Phạm Ngọc Thiện**
 
-URL: **Insert your Heroku URL here**
+URL: **https://login-app-baitap2-udpt.herokuapp.com/users/login**
 
 ## Chức năng
 
@@ -36,10 +36,10 @@ Danh sách chức năng **phụ**:
 Danh sách chức năng **phụ** đã làm nhưng không được liệt kê ở trên:
 
 Các chuẩn đầu ra cần thực hiện:
-* [ ] Git với Centralize Workflow
-* [ ] Git theo Feature Branch Workflow
-* [ ] Git theo Feature Branch Workflow có Pull Request
-* [ ] Git theo Gitflow Workflow
+* [x] Git với Centralize Workflow
+* [x] Git theo Feature Branch Workflow
+* [x] Git theo Feature Branch Workflow có Pull Request
+* [x] Git theo Gitflow Workflow
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:

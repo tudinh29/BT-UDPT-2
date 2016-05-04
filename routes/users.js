@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/register', function(req, res, next) {
 	res.render('register',{
-		'title': 'Register1'
+		'title': 'Register'
 	})
 });
 
@@ -23,7 +23,7 @@ router.get('/login', function(req, res, next) {
 });
 router.get('/index', function(req, res, next) {
 	res.render('index',{
-		'title': 'Message'
+		'title': 'Index'
 	})
 });
 
