@@ -36,9 +36,9 @@ Danh sách chức năng **phụ**:
 Danh sách chức năng **phụ** đã làm nhưng không được liệt kê ở trên:
 
 Các chuẩn đầu ra cần thực hiện:
-* [x] Git với Centralize Workflow
-* [x] Git theo Feature Branch Workflow
-* [x] Git theo Feature Branch Workflow có Pull Request
+* [ ] Git với Centralize Workflow
+* [ ] Git theo Feature Branch Workflow
+* [ ] Git theo Feature Branch Workflow có Pull Request
 * [x] Git theo Gitflow Workflow
 ## Video Walkthrough
 
